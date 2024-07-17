@@ -1,19 +1,16 @@
-# go-proxycheck
+package main
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)]
+import (
+	"context"
 
-go-proxucheck is a simple library to check general IP address information and verify if it is a proxy or VPN. It's also possible to check email address for signs of being a disposable.
+	"log"
 
-The lib uses the [proxycheck.io](https://proxycheck.io) API to check the IP address and email address. You can use free tier or perform a registration to get a free API key and enjoy bigger limits.
+	"github.com/lazycloud-tech/go-proxycheck/validate"
+)
 
-In plans creationg of a simple web server to perform the checks and return results in XML or JSON.
-
-## Usage
-
-Single request for occasional checks. Useful when your app needs to check some info about IP once in a while.
-
-```
-    result, err := validate.CheckIPAddress(context.Background(),
+func main() {
+	// Single validator call for one-time operations.
+	result, err := validate.CheckIPAddress(context.Background(),
 		[]string{"8.8.8.8", "8.8.4.4"},
 		validate.IPValidationOptions{
 			VPN:      validate.VPNOptionBoth,
@@ -30,11 +27,10 @@ Single request for occasional checks. Useful when your app needs to check some i
 	if err != nil {
 		panic(err)
 	}
-```
 
-A validator instance for regurlar checks (e.g. in a web server). Useful when you need to check multiple IPs in a short period of time.
+	log.Printf("%+v", result)
 
-```
+	// Multiple validator calls for multiple operations (using in middleware, for example).
 	validator := validate.NewValidator(validate.IPValidationOptions{
 		VPN:      validate.VPNOptionBoth,
 		ASN:      validate.ASNOptionActive,
@@ -61,4 +57,4 @@ A validator instance for regurlar checks (e.g. in a web server). Useful when you
 	}
 
 	log.Printf("%+v", result)
-```
+}
