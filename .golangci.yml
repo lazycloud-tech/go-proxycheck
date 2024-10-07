@@ -1,5 +1,5 @@
 run:
-  go: "1.22"
+  go: "1.23"
   tests: false
 
 outputs:
@@ -28,9 +28,8 @@ linters:
     - errchkjson
     - errname
     - errorlint
-    - execinquery
     - exhaustive
-    - exportloopref
+    - copyloopvar
     - forbidigo
     - forcetypeassert
     - funlen
@@ -45,9 +44,9 @@ linters:
     - gocyclo
     - godot
     - godox
-    - goerr113
+    - err113
     - goheader
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosmopolitan

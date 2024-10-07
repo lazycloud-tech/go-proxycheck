@@ -9,35 +9,53 @@ import (
 const (
 	apiV2Address         = "https://proxycheck.io/v2/"
 	defaultClientTimeout = 30 * time.Second
+)
 
+const (
 	statusOK     = "ok"
 	statusDenied = "denied"
 	statusError  = "error"
+)
 
+const (
 	VPNOptionProxyOnly = "0"
 	VPNOptionAny       = "1"
 	VPNOptionVPNOnly   = "2"
 	VPNOptionBoth      = "3"
+)
 
+const (
 	ASNOptionInactive = "0"
 	ASNOptionActive   = "1"
+)
 
+const (
 	CurrencyOptionInactive = "0"
 	CurrencyOptionActive   = "1"
+)
 
+const (
 	NodeOptionInactive = "0"
 	NodeOptionActive   = "1"
+)
 
+const (
 	TimeOptionInactive = "0"
 	TimeOptionActive   = "1"
+)
 
-	RiskOptionIncative  = "0"
+const (
+	RiskOptionInactive  = "0"
 	RiskOptionScoreOnly = "1"
 	RiskOptionFull      = "2"
+)
 
+const (
 	PortOptionInactive = "0"
 	PortOptionActive   = "1"
+)
 
+const (
 	SeenOptionInactive = "0"
 	SeenOptionActive   = "1"
 )
@@ -53,6 +71,7 @@ var (
 	ErrReadingResponseBody   = errors.New("error reading response body")
 	ErrPreparingRequest      = errors.New("error preparing request")
 	ErrSendingRequest        = errors.New("error sending request")
+	ErrUnexpectedStatus      = errors.New("unexpected status")
 )
 
 type APIResponse struct {
@@ -63,28 +82,28 @@ type APIResponse struct {
 	Data      map[string]IPValidationResult `mapstructure:",remain"`
 }
 
-// Options is the struct that holds the options for the validation.
+// IPValidationOptions holds the options for the validation.
 // Full list of flags can be found at https://proxycheck.io/api/#query_flags.
 type IPValidationOptions struct {
-	APIAddress string // Keep empty to use default Proxycheck address. Replace in case you need to mock the API.
-	Timeout    time.Duration
-	APIKey     string
-	VPN        string
-	ASN        string
-	Currency   string
-	Node       string
-	Time       string
-	Risk       string
-	Port       string
-	Seen       string
-	Days       string
-	Tag        string
+	APIAddress string        // Keep empty to use default Proxycheck address. Replace in case you need to mock the API.
+	Timeout    time.Duration // Timeout for the HTTP client.
+	APIKey     string        // API key for authentication.
+	VPN        string        // VPN option.
+	ASN        string        // ASN option.
+	Currency   string        // Currency option.
+	Node       string        // Node option.
+	Time       string        // Time option.
+	Risk       string        // Risk option.
+	Port       string        // Port option.
+	Seen       string        // Seen option.
+	Days       string        // Days option.
+	Tag        string        // Tag option.
 }
 
+// MakeQuery constructs the query string from the IPValidationOptions.
 func (opts *IPValidationOptions) MakeQuery() string {
 	payload := url.Values{}
-	// p is always 0 to not waste resources - we don't need to prettify the output.
-	payload.Add("p", "0")
+	payload.Add("p", "0") // p is always 0 to not waste resources - we don't need to prettify the output.
 
 	if opts.APIKey != "" {
 		payload.Add("key", opts.APIKey)
@@ -134,7 +153,8 @@ func (opts *IPValidationOptions) MakeQuery() string {
 }
 
 type IPValidationResult struct {
-	// Error will be filled if there is an error fot this specific entity. All other fields will be empty.
+	// Error will be filled if there is an error for this specific entity.
+	// All other fields will be empty.
 	Error         string        `json:"error"`
 	ASN           string        `json:"asn"`
 	Range         string        `json:"range"`
@@ -179,7 +199,8 @@ type AttackHistory struct {
 }
 
 type EmailValidationResult struct {
-	// Error will be filled if there is an error fot this specific entity. All other fields will be empty.
+	// Error will be filled if there is an error for this specific entity.
+	// All other fields will be empty.
 	Error      string `json:"error"`
 	Disposable string `json:"disposable"`
 }
